@@ -3,17 +3,19 @@
     "outDir": "./dist/",
     "sourceMap": true,
     "allowJs": true,
+    "noLib": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "module": "ES6",
     "removeComments": true,
-    "target": "es2017"
+    "declaration": false,
+    "noImplicitAny": false,
+    "target": "es2017",
+    "moduleResolution": "node"
   },
   "include": [
     "src/**/*",
     "game.ts",
     "game.json"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
   ]
 }
