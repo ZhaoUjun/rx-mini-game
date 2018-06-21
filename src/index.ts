@@ -1,3 +1,3 @@
 export function initGame() {
-	return "21";
+	return " 21";
 }
