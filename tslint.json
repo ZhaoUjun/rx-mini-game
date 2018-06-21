@@ -3,7 +3,20 @@
     "tslint:recommended",
     "tslint-config-prettier"
   ],
+  "globals":{
+      "wx":true
+  },
   "rules":{
-
+    "no-console": {
+            "severity": "warning",
+            "options": [
+                "debug",
+                "info",
+                "log",
+                "time",
+                "timeEnd",
+                "trace"
+            ]
+        }
   }
 }

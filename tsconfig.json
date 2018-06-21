@@ -1,10 +1,19 @@
 {
   "compilerOptions": {
+    "outDir": "./dist/",
     "sourceMap": true,
     "allowJs": true,
-    "module": "commonjs",
+    "module": "ES6",
     "removeComments": true,
-   // 可以使用 Promise, async, await等新语法
     "target": "es2017"
-  }
+  },
+  "include": [
+    "src/**/*",
+    "game.ts",
+    "game.json"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
 }
