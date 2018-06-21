@@ -1,0 +1,39 @@
+{
+  "name": "tetris",
+  "version": "1.0.0",
+  "description": "wechat xiaoyouxi build with rx",
+  "main": "game.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{ts,json,css,md}": [
+      "tslint --fix",
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "keywords": [
+    "rxjs",
+    "xiaoyouxi"
+  ],
+  "author": "ujun",
+  "license": "ISC",
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-loader": "^7.1.4",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.2.0",
+    "prettier": "^1.13.5",
+    "ts-loader": "^4.4.1",
+    "tslint": "^5.10.0",
+    "tslint-config-prettier": "^1.13.0",
+    "typescript": "^2.9.2",
+    "uglifyjs-webpack-plugin": "^1.2.6",
+    "webpack": "^4.12.0",
+    "webpack-dev-server": "^3.1.4"
+  }
+}
