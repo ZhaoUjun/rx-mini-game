@@ -1,4 +1,7 @@
 {
+  "rulesDirectory": [
+    "node_modules/rxjs-tslint"
+  ],
   "extends": [
     "tslint:recommended",
     "tslint-config-prettier"
@@ -18,6 +21,10 @@
                 "trace"
             ]
     },
-    "ordered-imports": false
+    "ordered-imports": false,
+    "rxjs-collapse-imports": true,
+    "rxjs-pipeable-operators-only": true,
+    "rxjs-no-static-observable-methods": true,
+    "rxjs-proper-imports": true
   }
 }
