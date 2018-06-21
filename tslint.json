@@ -17,6 +17,7 @@
                 "timeEnd",
                 "trace"
             ]
-        }
+    },
+    "ordered-imports": false
   }
 }
