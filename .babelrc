@@ -1,2 +1,8 @@
 { 
+    "presets": [
+        "env"
+      ],
+    "plugins": [
+        ["import",{"libraryName":"rxjs"}]
+    ]
 }

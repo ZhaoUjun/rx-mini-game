@@ -1,7 +1,5 @@
 {
-  "rulesDirectory": [
-    "node_modules/rxjs-tslint"
-  ],
+  
   "extends": [
     "tslint:recommended",
     "tslint-config-prettier"
