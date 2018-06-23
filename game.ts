@@ -1,3 +1,3 @@
-import { initGame } from "./src/index";
+import { initGame } from "./src";
 
 initGame();
