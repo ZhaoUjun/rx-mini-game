@@ -1,3 +1,4 @@
+import {ensureInt} from './utils'
 declare const wx:any
 
 export const WINDOW_WIDTH=wx.getSystemInfoSync().windowWidth // 屏幕宽度
@@ -13,3 +14,5 @@ export const CANVAS_BG_COLOR='#67776a'// 画布背景
 export const PIX_COLOR_INACTIVE='#5b6b5e'
 
 export const PIX_COLOR_ACTIVE='#040b03'
+
+export const PIX_WIDTH=ensureInt(CANVAS_HEIGHT / 20)

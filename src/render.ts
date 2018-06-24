@@ -3,11 +3,13 @@ import {
 	CANVAS_WIDTH,
 	CANVAS_BG_COLOR,
 	PIX_COLOR_INACTIVE,
-	PIX_COLOR_ACTIVE
+	PIX_COLOR_ACTIVE,
+	PIX_WIDTH
 } from "./canstant";
+import {Tetris} from './Tetris'
+
 import { ensureInt } from "./utils";
 
-const PIX_WIDTH=ensureInt(CANVAS_HEIGHT / 20)
 
 
 function renderRect(
@@ -69,7 +71,11 @@ export function renderPlayground(context:CanvasRenderingContext2D) {
 	iniData.forEach((status,index)=>{
 		const x=ensureInt(iniPositionX+(index%10)*PIX_WIDTH);
 		const y=ensureInt(index/10)*PIX_WIDTH;
-		console.log(y)
 		renderSinglePix(context,status==='1',x,y)
 	})
+}
+
+export function renderTetris(context:CanvasRenderingContext2D){
+	const tetris=new Tetris(6,0,2);
+	tetris.render(context)
 }
