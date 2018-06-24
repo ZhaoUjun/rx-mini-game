@@ -4,10 +4,12 @@ import {
 	CANVAS_BG_COLOR,
 	PIX_COLOR_INACTIVE,
 	PIX_COLOR_ACTIVE,
-	PIX_WIDTH
+	PIX_WIDTH,
+	FONT_COLOR
 } from "./canstant";
 import {Tetris} from './Tetris'
-
+import {diretionPosition,buttonSize} from './diretion$'
+import {functionKeysPosition} from './functionalKeys$'
 import { ensureInt } from "./utils";
 
 
@@ -22,6 +24,42 @@ function renderRect(
 	context.save();
 	context.fillStyle = color;
 	context.fillRect(x, y, width, width);
+}
+
+function renderAcr(context,x,y,r,text=''){
+	context.save();
+	context.fillStyle=PIX_COLOR_ACTIVE;
+	context.beginPath();
+	context.arc(x,y,r,0,2*Math.PI);
+	context.fill();
+	context.restore();
+	context.save();
+	context.font='30px Verdana';
+	context.textAlign="center";
+	context.fillStyle=CANVAS_BG_COLOR;
+	context.fillText(text,x,y+9);
+	context.restore();
+}
+
+function renderDiretionButtons(context:CanvasRenderingContext2D){
+	Object.keys(diretionPosition).forEach(key=>{
+		const [x,y]=diretionPosition[key];
+		const texts={
+			left:"◁",
+			right:"▷",
+			top:"▲",
+			bottom:"▼"
+		}
+		renderAcr(context,x,y,buttonSize,texts[key])
+	});
+	Object.keys(functionKeysPosition).forEach(key => {
+		const [x,y]=functionKeysPosition[key];
+		const texts={
+			a:"A",
+			b:"B",
+		}
+		renderAcr(context,x,y,buttonSize,texts[key])
+	});
 }
 
 export function renderCanvas(
@@ -73,6 +111,7 @@ export function renderPlayground(context:CanvasRenderingContext2D) {
 		const y=ensureInt(index/10)*PIX_WIDTH;
 		renderSinglePix(context,status==='1',x,y)
 	})
+	renderDiretionButtons(context);
 }
 
 export function renderTetris(context:CanvasRenderingContext2D){
