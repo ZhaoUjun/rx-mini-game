@@ -10,7 +10,7 @@ export interface TETRISLIKE{
     type:number,
     position:number,
     shape:number,
-    render(context:CanvasRenderingContext2D):void
+    render?(context:CanvasRenderingContext2D):void
 }
 
 export const TETRIS_TYPE=[
@@ -33,7 +33,7 @@ export const TETRIS_TYPE=[
     /**
      * like example 5
      */
-    [[0,1,10,11]],
+    [[0,1,10,11],[0,1,10,11]],
     /**
      * like example 6
      */

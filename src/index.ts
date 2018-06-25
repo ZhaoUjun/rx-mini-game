@@ -13,11 +13,8 @@ export function initGame() {
 	renderCanvas(canvas);
 	renderPlayground(context);
 	fallingTetris$.subscribe(tetris=>{
-		const {previous,current}=tetris;
-		if(previous){
-			previous.render(context,false);
-		}
-		current.render(context,true);
+		const {type,shape,position}=tetris;
+		renderTetris(context,type,position,shape)
 	})
 }
 
