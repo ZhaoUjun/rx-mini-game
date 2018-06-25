@@ -10,6 +10,9 @@ const patterns=[
 module.exports={
     mode:'production',
     ...commonConfig,
+    // optimization: {
+    //     minimize: true
+    // },
     plugins: [
         new CopyWebpackPlugin([ ...patterns ]),
         new CleanWebpackPlugin([

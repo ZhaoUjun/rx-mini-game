@@ -55,7 +55,7 @@ export class Tetris implements TETRISLIKE{
         this.shape=shape
     }
 
-    public render(context){
+    public render(context,isActive=true){
         const type=TETRIS_TYPE[this.type];
         const shape=this.shape%type.length;
         type[shape]
@@ -64,7 +64,7 @@ export class Tetris implements TETRISLIKE{
             const iniPositionX=(CANVAS_WIDTH-CANVAS_HEIGHT/2)/2;
             const x=ensureInt(iniPositionX+(pos%10)*PIX_WIDTH);
             const y=ensureInt(pos/10)*PIX_WIDTH;
-            renderSinglePix(context,true,x,y)
+            renderSinglePix(context,isActive,x,y)
         })
     }
 }
