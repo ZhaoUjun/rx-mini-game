@@ -3,7 +3,7 @@ import { nextTetris$, getRandomType } from "./nextTetris$";
 import * as diretion from "./diretion$";
 import { keyA$ } from "./functionalKeys$";
 import { tick$ } from "./tick$";
-
+import {always} from './utils'
 import "rxjs/add/observable/combineLatest";
 import "rxjs/add/operator/scan";
 import "rxjs/add/operator/combineLatest";
@@ -15,11 +15,11 @@ const INITIAL_POSITION = 3;
 
 const INITIAL_SHPAE=0
 
-const left$=diretion.left$.map(_ => -1).startWith(0);
-const right$=diretion.right$.map(_ => 1).startWith(0);
+const left$=diretion.left$.map(always(-1)).startWith(0);
+const right$=diretion.right$.map(always(1)).startWith(0);
 
 const position$ = tick$
-    .map(_ => 10)
+    .map(always(10))
     .startWith(0)
 	.merge(left$,right$)
 	.scan((acc, one) => acc + one,INITIAL_POSITION)
