@@ -45,10 +45,10 @@ function renderDiretionButtons(context:CanvasRenderingContext2D){
 	Object.keys(diretionPosition).forEach(key=>{
 		const [x,y]=diretionPosition[key];
 		const texts={
-			left:"◁",
-			right:"▷",
 			top:"▲",
-			bottom:"▼"
+			right:"▷",
+			bottom:"▼",
+			left:"◁"
 		}
 		renderAcr(context,x,y,buttonSize,texts[key])
 	});
@@ -114,7 +114,7 @@ export function renderPlayground(context:CanvasRenderingContext2D) {
 	renderDiretionButtons(context);
 }
 
-export function renderTetris(context:CanvasRenderingContext2D){
-	const tetris=new Tetris(6,0,2);
+export function renderTetris(context:CanvasRenderingContext2D,type,postion,shape){
+	const tetris=new Tetris(type,postion,shape);
 	tetris.render(context)
 }

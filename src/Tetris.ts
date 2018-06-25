@@ -9,7 +9,7 @@ import {renderSinglePix} from './render'
 export interface TETRISLIKE{
     type:number,
     position:number,
-    current:number,
+    shape:number,
     render(context:CanvasRenderingContext2D):void
 }
 
@@ -47,18 +47,18 @@ export const TETRIS_TYPE=[
 export class Tetris implements TETRISLIKE{
     public type:number
     public position:number
-    public current:number=0
+    public shape:number=0
 
-    constructor(type:number,position:number,current:number){
+    constructor(type:number,position:number,shape:number){
         this.type=type;
         this.position=position;
-        this.current=current
+        this.shape=shape
     }
 
     public render(context){
         const type=TETRIS_TYPE[this.type];
-        const current=this.current%type.length;
-        type[current]
+        const shape=this.shape%type.length;
+        type[shape]
         .map(item=>item+this.position)
         .forEach(pos=>{
             const iniPositionX=(CANVAS_WIDTH-CANVAS_HEIGHT/2)/2;

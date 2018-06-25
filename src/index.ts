@@ -14,9 +14,11 @@ export function initGame() {
 	const context=canvas.getContext('2d')
 	renderCanvas(canvas);
 	renderPlayground(context);
-	renderTetris(context);
+
 	fallingTetris$.subscribe(next=>{
-		console.log(next)
+		const {type,position,shape} =next;
+		console.log(position)
+		renderTetris(context,type,position,shape);
 	})
 	Observable.of(1, 2, 3)
 		.map(x => x + "!!!")

@@ -10,14 +10,13 @@ export type Touch={
 }
 
 export type TouchEvent={
-    touches:Array<Touch>,
-    changedTouches:Array<Touch>,
+    touches:Touch[],
+    changedTouches:Touch[],
     timeStamp:number
 }
 
 export const touch$=Observable.create(observer=>{
     wx.onTouchStart((res:TouchEvent)=>{
-        console.log(res)
         observer.next(res)
     })
 })
