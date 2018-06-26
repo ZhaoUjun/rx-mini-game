@@ -1,5 +1,4 @@
 import {Observable} from 'rxjs/Observable'
-
 declare const wx:any
 
 export type Touch={

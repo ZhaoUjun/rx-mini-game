@@ -5,6 +5,7 @@ import { keyA$ } from "./functionalKeys$";
 import { tick$ } from "./tick$";
 import { always,log } from "./utils";
 import { Tetris, TETRIS_TYPE } from "./Tetris";
+import {heap$} from './heap$'
 import "rxjs/add/observable/combineLatest";
 import "rxjs/add/operator/scan";
 import "rxjs/add/operator/combineLatest";
@@ -12,6 +13,8 @@ import "rxjs/add/operator/merge";
 import "rxjs/add/operator/startWith";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/takeUntil";
+import "rxjs/add/operator/share";
+import "rxjs/add/operator/distinctUntilChanged";
 
 const INITIAL_POSITION = 3;
 const INITIAL_SHPAE = 0;
@@ -39,9 +42,14 @@ export const fallingTetris$ = Observable.combineLatest(
 		ensureNotOverPlayground,
 		{ type: -1, position: 0, shape: 0 }
 	)
+	.distinctUntilChanged()
+	.combineLatest(heap$,(tetris,heap)=>({...tetris,heap}))
+	.scan(ensureNotSpinOverHeap,{previous:null,current:null})
+	.map(acc=>acc.current)
+	.distinctUntilChanged()
 
 
-function ensureNotOverPlayground(previous, next) {
+function ensureNotOverPlayground(previous:Tetris, next:Tetris) {
     const { shape, position, type } = next;
 	if (previous.type !== type) {
 		return next;
@@ -53,4 +61,21 @@ function ensureNotOverPlayground(previous, next) {
     });
 
     return isOverBorder ? previous : { type, position: nextPostion, shape: nextShape };
+}
+
+function ensureNotSpinOverHeap(acc,next){
+	if(!acc.previous){
+		return {previous:next,current:next}
+	}
+	const {position,type,heap,shape}=acc.previous;
+	if(shape===next.shape){
+		return {previous:acc.current,current:next}
+	}
+	const nextPixs=TETRIS_TYPE[next.type][next.shape].map(i=>i+next.position);
+	return checkCanSpin(next.heap,nextPixs)?{previous:acc.current,current:next}:acc
+}
+
+function checkCanSpin(heap:number[],current:number[]){
+	// console.log(heap,current)
+	return !current.some(item=>heap.includes(item))
 }
