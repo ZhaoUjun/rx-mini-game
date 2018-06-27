@@ -1,81 +1,83 @@
 import { Observable } from "rxjs/Observable";
-import { nextTetris$, getRandomType } from "./nextTetris$";
+import { nextTetris$, getRandomType, getRandomTetris } from "./nextTetris$";
 import * as diretion from "./diretion$";
 import { keyA$ } from "./functionalKeys$";
 import { tick$ } from "./tick$";
-import { always,log } from "./utils";
+import { always, log, hasSameVal } from "./utils";
 import { Tetris, TETRIS_TYPE } from "./Tetris";
-import {heap$} from './heap$'
+import { heap$ } from "./heap$";
 import "rxjs/add/observable/combineLatest";
+import "rxjs/add/observable/merge";
 import "rxjs/add/operator/scan";
 import "rxjs/add/operator/combineLatest";
 import "rxjs/add/operator/merge";
 import "rxjs/add/operator/startWith";
 import "rxjs/add/operator/map";
+import "rxjs/add/operator/mapTo";
 import "rxjs/add/operator/takeUntil";
 import "rxjs/add/operator/share";
 import "rxjs/add/operator/distinctUntilChanged";
+import "rxjs/add/operator/pluck";
+import "rxjs/add/operator/debounceTime";
 
+interface PositionsWithHeap {
+	positions: number[];
+	heap: number[];
+}
 const INITIAL_POSITION = 3;
 const INITIAL_SHPAE = 0;
+const INITIAL_TETRIS = getRandomTetris();
 
-const left$ = diretion.left$.map(always(-1)).startWith(0);
-const right$ = diretion.right$.map(always(1)).startWith(0);
+const left$ = diretion.left$.map(always(-1));
+const right$ = diretion.right$.map(always(1));
+const down$ = tick$.map(always(10));
 
-const position$ = tick$
-	.map(always(10))
-	.startWith(0)
-    .merge(left$, right$,nextTetris$.map(always(4)))
-	// .startWith(4);
+export const position$ = down$
+	.merge(nextTetris$.mapTo(4), left$, right$)
 
-const shape$ = keyA$.scan((acc, _) => acc + 1, 0).startWith(INITIAL_SHPAE);
+export const spin$ = keyA$
+	.mapTo(1)
+	.merge(nextTetris$.map(i=>i.shape))
+	.scan((acc,next)=>({count:acc.count+1,shape:next}),{count:0,shape:INITIAL_TETRIS.shape})
+	.startWith({count:0,shape:INITIAL_TETRIS.shape})
 
-// const type$ = nextTetris$.startWith(getRandomType());
+export const type$ = nextTetris$.map(i => i.type).startWith(INITIAL_TETRIS.type);
 
-export const fallingTetris$ = Observable.combineLatest(
-	nextTetris$,
-	position$,
-	shape$,
-	(nextTetris, position, shape) => ({ ...nextTetris, position, shape })
+export const fallingTetris$ = position$.combineLatest(
+	type$,
+	spin$,
+	(position, type, spin) => ({ type, position, spin })
 )
-	.scan(
-		ensureNotOverPlayground,
-		{ type: -1, position: 0, shape: 0 }
-	)
+.do(log)
+	.scan(ensureNotOverPlayground,{ type: -1, position: 0, shape: 0,count:0 })
+	.map(({ position, type, shape }) => {
+		console.log(position, type, shape)
+		// shape = shape % TETRIS_TYPE[type].length;
+		return TETRIS_TYPE[type][shape].map(i => i + position);
+	})
 	.distinctUntilChanged()
-	.combineLatest(heap$,(tetris,heap)=>({...tetris,heap}))
-	.scan(ensureNotSpinOverHeap,{previous:null,current:null})
-	.map(acc=>acc.current)
-	.distinctUntilChanged()
+	.combineLatest(heap$, (positions, heap) => ({ positions, heap }))
+	.filter(ensureNotSpinOverHeap)
+	.map(i => i.positions)
+	.distinctUntilChanged();
 
-
-function ensureNotOverPlayground(previous:Tetris, next:Tetris) {
-    const { shape, position, type } = next;
-	if (previous.type !== type) {
-		return next;
+function ensureNotOverPlayground(previous, next) {
+	const { spin, position, type } = next;
+	const{shape,count}=spin;
+	if (previous.type !== type || position === 4) {
+		return { type, position, shape ,count};
 	}
-    const nextShape = shape % TETRIS_TYPE[type].length;
-    const nextPostion = nextShape===previous.shape?(previous.position + position):previous.position;
-	const isOverBorder = TETRIS_TYPE[type][nextShape].some(item => {
+	const isSpin=count!==previous;
+	const nextShape = isSpin?(shape+previous.shape):previous.shape;
+	const nextPostion =!isSpin ? previous.position + position : previous.position;
+	const shapes=TETRIS_TYPE[type];
+	const isOverBorder = shapes[nextShape%shapes.length].some(item => {
 		return Math.abs(((item + nextPostion) % 10) - (nextPostion % 10)) > 4;
-    });
-
-    return isOverBorder ? previous : { type, position: nextPostion, shape: nextShape };
+	});
+	console.log(nextShape)
+	return isOverBorder ? previous : { type, position: nextPostion, shape: nextShape ,count};
 }
 
-function ensureNotSpinOverHeap(acc,next){
-	if(!acc.previous){
-		return {previous:next,current:next}
-	}
-	const {position,type,heap,shape}=acc.previous;
-	if(shape===next.shape){
-		return {previous:acc.current,current:next}
-	}
-	const nextPixs=TETRIS_TYPE[next.type][next.shape].map(i=>i+next.position);
-	return checkCanSpin(next.heap,nextPixs)?{previous:acc.current,current:next}:acc
-}
-
-function checkCanSpin(heap:number[],current:number[]){
-	// console.log(heap,current)
-	return !current.some(item=>heap.includes(item))
+function ensureNotSpinOverHeap(data: PositionsWithHeap) {
+	return !hasSameVal(data.heap, data.positions);
 }

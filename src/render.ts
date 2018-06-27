@@ -103,13 +103,13 @@ export function renderSinglePix(
 	renderRect(context, innerWidth, color, innerPosX, innerPosY);
 }
 
-export function renderPlayground(context:CanvasRenderingContext2D) {
+export function renderPlayground(context:CanvasRenderingContext2D,activePix:number[]) {
 	const iniPositionX=(CANVAS_WIDTH-CANVAS_HEIGHT/2)/2;
 	const iniData=Array(200).fill('0');
 	iniData.forEach((status,index)=>{
 		const x=ensureInt(iniPositionX+(index%10)*PIX_WIDTH);
 		const y=ensureInt(index/10)*PIX_WIDTH;
-		renderSinglePix(context,status==='1',x,y)
+		renderSinglePix(context,activePix.includes(index),x,y)
 	})
 	renderDiretionButtons(context);
 }
@@ -117,4 +117,12 @@ export function renderPlayground(context:CanvasRenderingContext2D) {
 export function renderTetris(context:CanvasRenderingContext2D,type,postion,shape){
 	const tetris=new Tetris(type,postion,shape);
 	tetris.render(context)
+}
+
+export function renderScene(context:CanvasRenderingContext2D,scene:number[]){
+	context.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+	context.fillStyle = CANVAS_BG_COLOR;
+	context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+	renderDiretionButtons(context);
+	renderPlayground(context,scene);
 }
