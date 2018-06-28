@@ -7,7 +7,7 @@ import "rxjs/add/operator/takeWhile";
 const FPS = 60;
 
 export const game$ = Observable.interval(1000 / FPS, animationFrame)
-	.combineLatest(scene$, (_, scene) => scene)
+	.withLatestFrom(scene$, (_, scene) => scene)
 	.takeWhile(scene => !gameOver(scene));
 
 function gameOver(scene: Scene) {

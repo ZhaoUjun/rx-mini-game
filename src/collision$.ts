@@ -3,13 +3,14 @@ import { heap$ } from "./heap$";
 import { fallingTetris$ } from "./fallingTetris$";
 import { hasSameVal } from "./utils";
 import "rxjs/add/operator/share";
+import "rxjs/add/operator/withLatestFrom";
 interface PlayGround {
 	fallingTetris: number[];
 	heap: number[];
 }
 
 export const collision$ = tick$
-	.combineLatest(fallingTetris$, heap$, (_, fallingTetris, heap) => ({ fallingTetris, heap }))
+	.withLatestFrom(fallingTetris$, heap$, (_, fallingTetris, heap) => ({ fallingTetris, heap }))
 	.filter(checkCollision)
 	.share();
 
@@ -50,4 +51,8 @@ function canReduce(start = 0, range = []) {
 		i++;
 	}
 	return res;
+}
+
+function doReduce(str:string,rows:number[]){
+	
 }
