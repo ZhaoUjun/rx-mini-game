@@ -19,9 +19,5 @@ export const scene$ = fallingTetris$
 		heap,
 		score
     }))
-    .takeWhile(scene=>!gameOver(scene));
 
-function gameOver(scene:Scene){
-	const {heap,tetris}=scene;
-	return heap.some(item=>tetris.includes(item))
-}
+

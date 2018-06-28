@@ -3,14 +3,14 @@ declare const GameGlobal:any;
 import "rxjs/add/observable/of";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/do";
-import { scene$ } from './scene$'
+import {game$} from './game$'
 import {renderScene} from './render'
 
 // GameGlobal.global=GameGlobal;
 export function initGame() {
 	const canvas = wx.createCanvas();
 	const context=canvas.getContext('2d')
-	scene$.subscribe({
+	game$.subscribe({
 		next:scene=>{
 			renderScene(context,scene)
 		},
