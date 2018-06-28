@@ -5,23 +5,22 @@ import { TETRIS_TYPE, TETRISLIKE } from "./Tetris";
 import { heap$ } from "./heap$";
 import { log } from "./utils";
 
+let tetrisKey = 0;
+
 export function getRandomType(): number {
 	return (~~(Math.random() * 100) % 6) + 1;
 }
 
 export function getRandomInt(max: number) {
-	return (~~(Math.random() * 100) % max) + 1;
+	return ~~(Math.random() * 100) % max;
 }
 
-export function getRandomTetris():TETRISLIKE {
+export function getRandomTetris(): TETRISLIKE {
 	const type = getRandomInt(6);
 	const shapes = TETRIS_TYPE[type];
 	const shape = getRandomInt(shapes.length);
-	return { type, shape, position: 4 };
+	return { type, shape, position: 4, key: ++tetrisKey };
 }
 
 // export const nextTetris$=new BehaviorSubject<TETRISLIKE>(getRandomTetris());
-export const nextTetris$ = heap$
-    .map(getRandomTetris)
-    // .do(log)
-    .share()
+export const nextTetris$ = heap$.map(getRandomTetris).share();

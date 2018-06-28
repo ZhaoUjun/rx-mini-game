@@ -7,12 +7,10 @@ import {
 	PIX_WIDTH,
 	FONT_COLOR
 } from "./canstant";
-import {Tetris} from './Tetris'
-import {diretionPosition,buttonSize} from './diretion$'
-import {functionKeysPosition} from './functionalKeys$'
+import { diretionPosition, buttonSize } from "./diretion$";
+import { functionKeysPosition } from "./functionalKeys$";
 import { ensureInt } from "./utils";
-
-
+import {Scene} from './scene$'
 
 function renderRect(
 	context: CanvasRenderingContext2D,
@@ -26,39 +24,39 @@ function renderRect(
 	context.fillRect(x, y, width, width);
 }
 
-function renderAcr(context,x,y,r,text=''){
+function renderAcr(context, x, y, r, text = "") {
 	context.save();
-	context.fillStyle=PIX_COLOR_ACTIVE;
+	context.fillStyle = PIX_COLOR_ACTIVE;
 	context.beginPath();
-	context.arc(x,y,r,0,2*Math.PI);
+	context.arc(x, y, r, 0, 2 * Math.PI);
 	context.fill();
 	context.restore();
 	context.save();
-	context.font='30px Verdana';
-	context.textAlign="center";
-	context.fillStyle=CANVAS_BG_COLOR;
-	context.fillText(text,x,y+9);
+	context.font = "30px Verdana";
+	context.textAlign = "center";
+	context.fillStyle = CANVAS_BG_COLOR;
+	context.fillText(text, x, y + 9);
 	context.restore();
 }
 
-function renderDiretionButtons(context:CanvasRenderingContext2D){
-	Object.keys(diretionPosition).forEach(key=>{
-		const [x,y]=diretionPosition[key];
-		const texts={
-			top:"▲",
-			right:"▷",
-			bottom:"▼",
-			left:"◁"
-		}
-		renderAcr(context,x,y,buttonSize,texts[key])
+function renderDiretionButtons(context: CanvasRenderingContext2D) {
+	Object.keys(diretionPosition).forEach(key => {
+		const [x, y] = diretionPosition[key];
+		const texts = {
+			up: "▲",
+			right: "▷",
+			down: "▼",
+			left: "◁"
+		};
+		renderAcr(context, x, y, buttonSize, texts[key]);
 	});
 	Object.keys(functionKeysPosition).forEach(key => {
-		const [x,y]=functionKeysPosition[key];
-		const texts={
-			a:"A",
-			b:"B",
-		}
-		renderAcr(context,x,y,buttonSize,texts[key])
+		const [x, y] = functionKeysPosition[key];
+		const texts = {
+			a: "A",
+			b: "B"
+		};
+		renderAcr(context, x, y, buttonSize, texts[key]);
 	});
 }
 
@@ -81,8 +79,8 @@ export function renderSinglePix(
 	context: CanvasRenderingContext2D,
 	isActive = false,
 	iniPositionX = 0,
-	iniPositionY=0,
-	width=PIX_WIDTH
+	iniPositionY = 0,
+	width = PIX_WIDTH
 ) {
 	const outerPadWidth = 2;
 	const midPadWidth = 6;
@@ -103,26 +101,29 @@ export function renderSinglePix(
 	renderRect(context, innerWidth, color, innerPosX, innerPosY);
 }
 
-export function renderPlayground(context:CanvasRenderingContext2D,activePix:number[]) {
-	const iniPositionX=(CANVAS_WIDTH-CANVAS_HEIGHT/2)/2;
-	const iniData=Array(200).fill('0');
-	iniData.forEach((status,index)=>{
-		const x=ensureInt(iniPositionX+(index%10)*PIX_WIDTH);
-		const y=ensureInt(index/10)*PIX_WIDTH;
-		renderSinglePix(context,activePix.includes(index),x,y)
-	})
+export function renderPlayground(context: CanvasRenderingContext2D, activePix: number[]) {
+	const iniPositionX = (CANVAS_WIDTH - CANVAS_HEIGHT / 2) / 2;
+	const iniData = Array(200).fill("0");
+	iniData.forEach((status, index) => {
+		const x = ensureInt(iniPositionX + (index % 10) * PIX_WIDTH);
+		const y = ensureInt(index / 10) * PIX_WIDTH;
+		renderSinglePix(context, activePix.includes(index), x, y);
+	});
 	renderDiretionButtons(context);
 }
 
-export function renderTetris(context:CanvasRenderingContext2D,type,postion,shape){
-	const tetris=new Tetris(type,postion,shape);
-	tetris.render(context)
-}
-
-export function renderScene(context:CanvasRenderingContext2D,scene:number[]){
-	context.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+export function renderScene(context: CanvasRenderingContext2D, scene: Scene) {
+	context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 	context.fillStyle = CANVAS_BG_COLOR;
 	context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 	renderDiretionButtons(context);
-	renderPlayground(context,scene);
+	renderPlayground(context, [...scene.tetris, ...scene.heap]);
+	renderSocre(context, scene.score)
+}
+
+export function renderSocre(context:CanvasRenderingContext2D, score:number){
+	const postionX=(CANVAS_WIDTH-CANVAS_HEIGHT/2);
+	context.textAlign = "center";
+	context.fillStyle=PIX_COLOR_ACTIVE;
+	context.fillText(`score:${score}`,postionX,20);
 }

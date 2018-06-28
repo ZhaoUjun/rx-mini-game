@@ -14,9 +14,9 @@ export const directionPositionX=(CANVAS_WIDTH-playgroundWidth)/4;
 export const directionPositionY=CANVAS_HEIGHT/2;
 
 export const diretionPosition={
-    top:[directionPositionX,directionPositionY-diretionRange],
+    up:[directionPositionX,directionPositionY-diretionRange],
     right:[directionPositionX+diretionRange,directionPositionY],
-    bottom:[directionPositionX,directionPositionY+diretionRange],
+    down:[directionPositionX,directionPositionY+diretionRange],
     left:[directionPositionX-diretionRange,directionPositionY]
 }
 
@@ -34,8 +34,8 @@ function filterDiretion(diretion:string){
 export const direction$=new Subject<TouchEvent>();
 export const left$=direction$.filter(filterDiretion('left'))
 export const right$=direction$.filter(filterDiretion('right'))
-export const top$=direction$.filter(filterDiretion('top'))
-export const bottom$=direction$.filter(filterDiretion('bottom'))
+export const top$=direction$.filter(filterDiretion('up'))
+export const down$=direction$.filter(filterDiretion('down'))
 
 
 touch$.subscribe(direction$)
