@@ -16,7 +16,7 @@ export function getRandomInt(max: number) {
 }
 
 export function getRandomTetris(): TETRISLIKE {
-	const type = 6||getRandomInt(7);
+	const type = 1||getRandomInt(7);
 	const shapes = TETRIS_TYPE[type];
 	const shape = getRandomInt(shapes.length);
 	return { type, shape, position: 4, key: ++tetrisKey };

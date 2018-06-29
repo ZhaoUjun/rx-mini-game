@@ -4,6 +4,8 @@ import { fallingTetris$ } from "./fallingTetris$";
 import { hasSameVal } from "./utils";
 import "rxjs/add/operator/share";
 import "rxjs/add/operator/withLatestFrom";
+
+
 interface PlayGround {
 	fallingTetris: number[];
 	heap: number[];
@@ -19,40 +21,45 @@ export const nextHeap$ = collision$.map(reduceTetris).do(data=>heap$.next(data.n
 function checkCollision(playGround: PlayGround): boolean {
 	const { fallingTetris, heap } = playGround;
 	const nextTetris = fallingTetris.map(i => i + 10);
-	return hasSameVal(nextTetris, heap) || nextTetris.some(item => item > 200);
-}
-
-function genrateNextHeap(playGround: PlayGround) {
-	return Array.from(new Set([...playGround.fallingTetris, ...playGround.heap]));
+	return hasSameVal(nextTetris, heap) || nextTetris.some(item => item > 199);
 }
 
 function reduceTetris(playGround: PlayGround) {
-	const rows = playGround.fallingTetris.reduce((acc, next) => acc.add(~~(next / 10)), new Set([]));
 	const nextHeap = [...playGround.fallingTetris, ...playGround.heap];
-	const data = Array(200).fill(0);
+    const data = Array(200).fill(0);
 	nextHeap.forEach(item => {
 		data[item] = 1;
-	});
-	const reduceRows = Array.from(rows).filter(item => canReduce(item * 10, data));
-	const score = reduceRows.length;
-	return score === 0
-		? { nextHeap, score }
-		: {
-				score,
-				nextHeap: nextHeap.filter(item => !reduceRows.includes(~~(item / 10)))
-		  };
+    });
+    return generateNextHeap(data.join(''))
 }
 
-function canReduce(start = 0, range = []) {
-	let i = 0;
-	let res = true;
-	while (i < 10 && res) {
-		res = range[start + i] === 1;
-		i++;
-	}
-	return res;
-}
-
-function doReduce(str:string,rows:number[]){
-	
+function generateNextHeap(str:string){
+    const win='1111111111';
+    const paddingUnit='0000000000';
+    const nextHeap=[];
+    let res='';
+    let i=0;
+    let temp='';
+    let padding=''
+    let score=0;
+    while(i<20){
+        temp=str.slice(i*10,(i+1)*10);
+        if(temp!==win){
+            res+=temp
+        }
+        else{
+            padding+=paddingUnit;
+            score++
+        }
+        i++;
+    }
+    i=0;
+    const arr=(padding+res).split('');
+    while(i<arr.length){
+        if(arr[i]==='1'){
+            nextHeap.push(i)
+        }
+        i++;
+    }
+    return {nextHeap,score}
 }
