@@ -39,8 +39,9 @@ const initStorage$ = createStorage < Storage > ("game");
 const sub$ = new Subject<Storage>();
 
 export const storage$ = sub$
-	.startWith(initStorage)    
 	.scan(reduce)
+	.startWith(initStorage)    
+
     // .share()
     
 
