@@ -2,18 +2,13 @@ import { tick$ } from "../tetris/tick$";
 import { heap$ } from "./heap$";
 import { fallingTetris$ } from "./fallingTetris$";
 import { hasSameVal } from "../utils";
+import { PlayGround, PlayGroundReducer } from "./type";
 import "rxjs/add/operator/share";
 import "rxjs/add/operator/withLatestFrom";
-
-interface PlayGround {
-	fallingTetris: number[];
-	heap: number[];
-}
 
 export const collision$ = tick$
 	.withLatestFrom(fallingTetris$, heap$, (_, fallingTetris, heap) => ({ fallingTetris, heap }))
 	.filter(checkCollision)
-	.share();
 
 export const nextHeap$ = collision$.map(reduceTetris).do(data => heap$.next(data.nextHeap));
 
@@ -23,7 +18,7 @@ function checkCollision(playGround: PlayGround): boolean {
 	return hasSameVal(nextTetris, heap) || nextTetris.some(item => item > 199);
 }
 
-function reduceTetris(playGround: PlayGround) {
+function reduceTetris(playGround: PlayGround): PlayGroundReducer {
 	const nextHeap = [...playGround.fallingTetris, ...playGround.heap];
 	const data = Array(200).fill(0);
 	nextHeap.forEach(item => {
@@ -32,7 +27,7 @@ function reduceTetris(playGround: PlayGround) {
 	return generateNextHeap(data.join(""));
 }
 
-function generateNextHeap(str: string) {
+function generateNextHeap(str: string): PlayGroundReducer {
 	const win = "1111111111";
 	const paddingUnit = "0000000000";
 	const nextHeap = [];

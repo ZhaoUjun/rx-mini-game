@@ -14,3 +14,13 @@ export interface Scene {
     heightScore:number;
     speed:number
 }
+
+export interface PlayGround {
+	fallingTetris: number[];
+	heap: number[];
+}
+
+export interface PlayGroundReducer{
+	nextHeap:number[]
+	score :number
+}
