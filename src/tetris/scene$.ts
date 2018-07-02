@@ -3,7 +3,6 @@ import { nextTetris$ } from "./tetris$";
 import { heap$ } from "./heap$";
 import { score$ } from "./score$";
 import { Scene } from "./type";
-import "rxjs/add/observable/combineLatest";
 import "rxjs/add/operator/withLatestFrom";
 import "rxjs/add/operator/takeWhile";
 import "rxjs/add/operator/do";

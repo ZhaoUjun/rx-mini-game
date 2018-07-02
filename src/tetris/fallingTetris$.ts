@@ -8,7 +8,6 @@ import { heap$ } from "./heap$";
 import { currentTetris$ } from "./tetris$";
 import "rxjs/add/observable/merge";
 import "rxjs/add/operator/scan";
-import "rxjs/add/operator/combineLatest";
 import "rxjs/add/operator/withLatestFrom";
 import "rxjs/add/operator/merge";
 import "rxjs/add/operator/startWith";

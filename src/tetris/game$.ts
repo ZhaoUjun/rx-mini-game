@@ -1,6 +1,5 @@
 import { scene$ } from "./scene$";
 import { render$ } from "../common/render$";
-import "rxjs/add/operator/combineLatest";
 import "rxjs/add/operator/takeWhile";
 
 export const game$ = render$.withLatestFrom(scene$, (_, scene) => scene).takeWhile(scene => {
