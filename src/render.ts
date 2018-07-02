@@ -4,14 +4,13 @@ import {
 	CANVAS_BG_COLOR,
 	PIX_COLOR_INACTIVE,
 	PIX_COLOR_ACTIVE,
-	PIX_WIDTH,
-	FONT_COLOR
+	PIX_WIDTH
 } from "./constant";
 import { diretionPosition, buttonSize } from "./common/diretion$";
 import { functionKeysPosition } from "./common/functionalKeys$";
 import { ensureInt } from "./utils";
 import { Scene, TetrisLike } from "./tetris/type";
-import { createPositions,createNextTetrisPositions } from "./tetris/utils";
+import { createNextTetrisPositions } from "./tetris/utils";
 
 const PIX_OUTER_PADDING = 2;
 const PIX_MID_PADDING = 6;
@@ -24,7 +23,6 @@ function renderRect(
 	x: number,
 	y: number
 ) {
-	// context.restore();
 	context.fillStyle = color;
 	context.fillRect(x, y, width, width);
 }
@@ -128,12 +126,12 @@ export function renderNextTetris(context: CanvasRenderingContext2D, tetris: Tetr
 	context.fillText(`next`, postionX, 40);
 	context.restore();
 	const iniData = Array(16).fill("0");
-	const positions=createNextTetrisPositions(tetris);
-	iniData.forEach((position,index)=>{
+	const positions = createNextTetrisPositions(tetris);
+	iniData.forEach((position, index) => {
 		const x = ensureInt(postionX + (index % 4) * PIX_WIDTH);
-		const y = ensureInt(index / 4) * PIX_WIDTH+60;
+		const y = ensureInt(index / 4) * PIX_WIDTH + 60;
 		renderSinglePix(context, positions.includes(index), x, y);
-	})
+	});
 }
 
 export function renderSocre(context: CanvasRenderingContext2D, score: number) {
