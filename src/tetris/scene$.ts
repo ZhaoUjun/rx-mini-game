@@ -1,24 +1,22 @@
-import { fallingTetris$ } from "./fallingTetris$";
+import { fallingTetris$ } from "./fallingTetris$"
+import {nextTetris$} from './tetris$'
 import { heap$ } from "./heap$";
 import { score$ } from "./score$";
-
+import {Scene} from './type'
 import "rxjs/add/observable/combineLatest";
 import "rxjs/add/operator/withLatestFrom";
 import "rxjs/add/operator/takeWhile";
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/map";
 
-export interface Scene {
-	tetris?: number[];
-	heap: number[];
-	score: number;
-}
+
 
 export const scene$ = fallingTetris$
-	.withLatestFrom(heap$, score$, (tetris, heap, score) => ({
+	.withLatestFrom(heap$, score$, nextTetris$,(tetris, heap, score,nextTetris) => ({
 		tetris,
 		heap,
-		score
+		score,
+		nextTetris
 	}))
 	.map(scene=>({isOver:gameOver(scene),scene}))
 	.share();

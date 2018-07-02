@@ -1,7 +1,8 @@
 import {touch$,TouchEvent} from './touch$';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/filter';
-import {CANVAS_HEIGHT,CANVAS_WIDTH} from './constant'
+import 'rxjs/add/operator/share';
+import {CANVAS_HEIGHT,CANVAS_WIDTH} from '../constant'
 
 export const buttonSize=30
 

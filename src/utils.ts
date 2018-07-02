@@ -11,6 +11,6 @@ export function log(data){
     return data
 }
 
-export function hasSameVal(heap: number[], positions: number[]) {
-	return positions.some(item => heap.includes(item));
+export function hasSameVal(a: number[], b: number[]) {
+	return a.some(item => b.includes(item));
 }

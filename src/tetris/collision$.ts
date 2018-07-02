@@ -1,7 +1,7 @@
-import { tick$ } from "./tick$";
+import { tick$ } from "../common/tick$";
 import { heap$ } from "./heap$";
 import { fallingTetris$ } from "./fallingTetris$";
-import { hasSameVal } from "./utils";
+import { hasSameVal } from "../utils";
 import "rxjs/add/operator/share";
 import "rxjs/add/operator/withLatestFrom";
 

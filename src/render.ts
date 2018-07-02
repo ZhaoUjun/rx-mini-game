@@ -7,15 +7,15 @@ import {
 	PIX_WIDTH,
 	FONT_COLOR
 } from "./constant";
-import { diretionPosition, buttonSize } from "./diretion$";
-import { functionKeysPosition } from "./functionalKeys$";
+import { diretionPosition, buttonSize } from "./common/diretion$";
+import { functionKeysPosition } from "./common/functionalKeys$";
 import { ensureInt } from "./utils";
-import {Scene} from './scene$'
+import { Scene, TetrisLike } from "./tetris/type";
+import { createPositions,createNextTetrisPositions } from "./tetris/utils";
 
 const PIX_OUTER_PADDING = 2;
 const PIX_MID_PADDING = 6;
 const PIX_INNER_PADDING = 12;
-
 
 function renderRect(
 	context: CanvasRenderingContext2D,
@@ -114,15 +114,31 @@ export function renderScene(context: CanvasRenderingContext2D, scene: Scene) {
 	context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 	context.fillStyle = CANVAS_BG_COLOR;
 	context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-	const playground=scene.tetris?[...scene.tetris, ...scene.heap]:scene.heap
+	const playground = scene.tetris ? [...scene.tetris, ...scene.heap] : scene.heap;
 	renderDiretionButtons(context);
-	renderPlayground(context,playground);
-	renderSocre(context, scene.score)
+	renderPlayground(context, playground);
+	renderSocre(context, scene.score);
+	renderNextTetris(context, scene.nextTetris);
 }
 
-export function renderSocre(context:CanvasRenderingContext2D, score:number){
-	const postionX=(CANVAS_WIDTH-CANVAS_HEIGHT/2);
-	context.textAlign = "center";
-	context.fillStyle=PIX_COLOR_ACTIVE;
-	context.fillText(`score:${score}`,postionX,20);
+export function renderNextTetris(context: CanvasRenderingContext2D, tetris: TetrisLike) {
+	const postionX = (CANVAS_WIDTH - CANVAS_HEIGHT / 2) * 0.5 + CANVAS_HEIGHT / 2;
+	context.textAlign = "left";
+	context.fillStyle = PIX_COLOR_ACTIVE;
+	context.fillText(`next`, postionX, 40);
+	context.restore();
+	const iniData = Array(16).fill("0");
+	const positions=createNextTetrisPositions(tetris);
+	iniData.forEach((position,index)=>{
+		const x = ensureInt(postionX + (index % 4) * PIX_WIDTH);
+		const y = ensureInt(index / 4) * PIX_WIDTH+60;
+		renderSinglePix(context, positions.includes(index), x, y);
+	})
+}
+
+export function renderSocre(context: CanvasRenderingContext2D, score: number) {
+	const postionX = (CANVAS_WIDTH - CANVAS_HEIGHT / 2) * 0.25;
+	context.textAlign = "left";
+	context.fillStyle = PIX_COLOR_ACTIVE;
+	context.fillText(`score:${score}`, postionX, 40);
 }

@@ -1,7 +1,7 @@
 import {touch$,TouchEvent} from './touch$';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/filter';
-import {CANVAS_HEIGHT,CANVAS_WIDTH} from './constant'
+import {CANVAS_HEIGHT,CANVAS_WIDTH} from '../constant'
 import {calculateLength,buttonSize} from './diretion$'
 
 const keyAPosition=[CANVAS_WIDTH*0.75,CANVAS_HEIGHT*0.65];
