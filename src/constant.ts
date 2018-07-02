@@ -17,7 +17,7 @@ export const PIX_COLOR_ACTIVE='#040b03'
 
 export const PIX_WIDTH=ensureInt(CANVAS_HEIGHT / 20)
 
-export const SPEED=1000;
+export const SPEED=100;
 
 export const FONT_COLOR='white'
 
