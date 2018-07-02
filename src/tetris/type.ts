@@ -11,5 +11,6 @@ export interface Scene {
 	nextTetris?: TetrisLike;
 	heap: number[];
     score: number;
-    heightScore:number
+    heightScore:number;
+    speed:number
 }

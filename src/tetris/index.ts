@@ -14,6 +14,7 @@ export function startTeris(context: CanvasRenderingContext2D) {
 	// })
 	game$.subscribe({
 		next: scene => {
+			console.log(scene)
 			renderScene(context, scene.scene);
 		},
 		complete: () => {

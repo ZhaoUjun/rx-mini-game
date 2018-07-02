@@ -1,7 +1,7 @@
 import { Observable } from "rxjs/Observable";
 import * as diretion from "../common/diretion$";
 import { keyA$ } from "../common/functionalKeys$";
-import { tick$ } from "../common/tick$";
+import { tick$ } from "./tick$";
 import { always } from "../utils";
 import { ensureIsValidAction, createPositions } from "./utils";
 import { heap$ } from "./heap$";

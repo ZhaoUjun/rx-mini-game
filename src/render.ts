@@ -118,7 +118,7 @@ export function renderScene(context: CanvasRenderingContext2D, scene: Scene) {
 	renderSocre(context, scene.score);
 	renderHeightSocre(context, scene.heightScore);
 	renderNextTetris(context, scene.nextTetris);
-	renderDifficulty(context,1)
+	renderDifficulty(context,11-scene.speed*10)
 }
 
 export function renderNextTetris(context: CanvasRenderingContext2D, tetris: TetrisLike) {
@@ -126,13 +126,13 @@ export function renderNextTetris(context: CanvasRenderingContext2D, tetris: Tetr
 	context.font="20px Arial";
 	context.textAlign = "left";
 	context.fillStyle = PIX_COLOR_ACTIVE;
-	context.fillText(`next`, postionX+10, 60);
+	context.fillText(`next`, postionX+10, 20);
 	context.restore();
 	const iniData = Array(16).fill("0");
 	const positions = createNextTetrisPositions(tetris);
 	iniData.forEach((position, index) => {
 		const x = ensureInt(postionX + (index % 4) * PIX_WIDTH)+10;
-		const y = ensureInt(index / 4) * PIX_WIDTH + 80;
+		const y = ensureInt(index / 4) * PIX_WIDTH + 40;
 		renderSinglePix(context, positions.includes(index), x, y);
 	});
 }
@@ -156,10 +156,10 @@ export function renderHeightSocre(context: CanvasRenderingContext2D, score: numb
 }
 
 export function renderDifficulty(context: CanvasRenderingContext2D, difficulty: number) {
-	const postionX = (CANVAS_WIDTH - CANVAS_HEIGHT / 2) * 0.5 + CANVAS_HEIGHT / 2;
+	const postionX = 20;
 	context.font="20px Arial";
 	context.textAlign = "left";
 	context.fillStyle = PIX_COLOR_ACTIVE;
-	context.fillText(`difficulty`, postionX+10, 20);
-	context.fillText(`${difficulty}`, postionX+10, 40);
+	context.fillText(`speed`, postionX, 20);
+	context.fillText(`${difficulty}`, postionX, 40);
 }

@@ -1,4 +1,4 @@
-import { tick$ } from "../common/tick$";
+import { tick$ } from "../tetris/tick$";
 import { heap$ } from "./heap$";
 import { fallingTetris$ } from "./fallingTetris$";
 import { hasSameVal } from "../utils";

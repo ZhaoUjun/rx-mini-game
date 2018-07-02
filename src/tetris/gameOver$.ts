@@ -1,7 +1,7 @@
 import { heap$ } from "./heap$";
 import { score$ } from "./score$";
 import { heightScore$ } from "./heightScore$";
-
+import { speed$ } from "./speed$";
 import { nextTetris$ } from "./tetris$";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/scan";
@@ -13,11 +13,12 @@ export const gameOver$ = Observable.interval(100)
 	.takeWhile(i => i < 21)
 	.map(genaratePixs)
 	.withLatestFrom(heap$, merge)
-	.withLatestFrom(score$, nextTetris$, heightScore$, (heap, score, nextTetris, heightScore) => ({
+	.withLatestFrom(score$, nextTetris$, heightScore$,speed$, (heap, score, nextTetris, heightScore,speed) => ({
 		heightScore,
 		heap,
 		score,
-		nextTetris
+		nextTetris,
+		speed
 	}));
 
 function calcLength(acc: number): number {
