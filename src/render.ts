@@ -6,11 +6,16 @@ import {
 	PIX_COLOR_ACTIVE,
 	PIX_WIDTH,
 	FONT_COLOR
-} from "./canstant";
+} from "./constant";
 import { diretionPosition, buttonSize } from "./diretion$";
 import { functionKeysPosition } from "./functionalKeys$";
 import { ensureInt } from "./utils";
 import {Scene} from './scene$'
+
+const PIX_OUTER_PADDING = 2;
+const PIX_MID_PADDING = 6;
+const PIX_INNER_PADDING = 12;
+
 
 function renderRect(
 	context: CanvasRenderingContext2D,
@@ -19,19 +24,16 @@ function renderRect(
 	x: number,
 	y: number
 ) {
-	context.save();
+	// context.restore();
 	context.fillStyle = color;
 	context.fillRect(x, y, width, width);
 }
 
 function renderAcr(context, x, y, r, text = "") {
-	context.save();
 	context.fillStyle = PIX_COLOR_ACTIVE;
 	context.beginPath();
 	context.arc(x, y, r, 0, 2 * Math.PI);
 	context.fill();
-	context.restore();
-	context.save();
 	context.font = "30px Verdana";
 	context.textAlign = "center";
 	context.fillStyle = CANVAS_BG_COLOR;
@@ -68,7 +70,6 @@ export function renderCanvas(
 	canvas.width = width;
 	canvas.height = height;
 	const context = canvas.getContext("2d");
-	context.save();
 	context.fillStyle = CANVAS_BG_COLOR;
 	context.fillRect(0, 0, width, height);
 	context.restore();
@@ -82,19 +83,16 @@ export function renderSinglePix(
 	iniPositionY = 0,
 	width = PIX_WIDTH
 ) {
-	const outerPadWidth = 2;
-	const midPadWidth = 6;
-	const innerPadWidth = 12;
-	const outerWidth = width - outerPadWidth;
-	const midWidth = width - midPadWidth;
-	const innerWidth = width - innerPadWidth;
+	const outerWidth = width - PIX_OUTER_PADDING;
+	const midWidth = width - PIX_MID_PADDING;
+	const innerWidth = width - PIX_INNER_PADDING;
 	const color = isActive ? PIX_COLOR_ACTIVE : PIX_COLOR_INACTIVE;
-	const outerPosX = iniPositionX + outerPadWidth / 2;
-	const outerPosY = iniPositionY + outerPadWidth / 2;
-	const midPosX = iniPositionX + midPadWidth / 2;
-	const midPosY = iniPositionY + midPadWidth / 2;
-	const innerPosX = iniPositionX + innerPadWidth / 2;
-	const innerPosY = iniPositionY + innerPadWidth / 2;
+	const outerPosX = iniPositionX + PIX_OUTER_PADDING / 2;
+	const outerPosY = iniPositionY + PIX_OUTER_PADDING / 2;
+	const midPosX = iniPositionX + PIX_MID_PADDING / 2;
+	const midPosY = iniPositionY + PIX_MID_PADDING / 2;
+	const innerPosX = iniPositionX + PIX_INNER_PADDING / 2;
+	const innerPosY = iniPositionY + PIX_INNER_PADDING / 2;
 	renderRect(context, width, CANVAS_BG_COLOR, iniPositionX, iniPositionY);
 	renderRect(context, outerWidth, color, outerPosX, outerPosY);
 	renderRect(context, midWidth, CANVAS_BG_COLOR, midPosX, midPosY);
@@ -116,8 +114,9 @@ export function renderScene(context: CanvasRenderingContext2D, scene: Scene) {
 	context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 	context.fillStyle = CANVAS_BG_COLOR;
 	context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+	const playground=scene.tetris?[...scene.tetris, ...scene.heap]:scene.heap
 	renderDiretionButtons(context);
-	renderPlayground(context, [...scene.tetris, ...scene.heap]);
+	renderPlayground(context,playground);
 	renderSocre(context, scene.score)
 }
 
