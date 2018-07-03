@@ -6,6 +6,9 @@ import { nextTetris$ } from "./tetris$";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/scan";
 import "rxjs/add/operator/mapTo";
+import "rxjs/add/operator/takeWhile";
+import "rxjs/add/operator/map";
+import "rxjs/add/operator/withLatestFrom";
 
 export const gameOver$ = Observable.interval(100)
 	.scan(calcLength, 0)

@@ -129,7 +129,7 @@ export function renderNextTetris(context: CanvasRenderingContext2D, tetris: Tetr
 	context.fillText(`next`, postionX+10, 20);
 	context.restore();
 	const iniData = Array(16).fill("0");
-	const positions = createNextTetrisPositions(tetris);
+	const positions =tetris? createNextTetrisPositions(tetris):[];
 	iniData.forEach((position, index) => {
 		const x = ensureInt(postionX + (index % 4) * PIX_WIDTH)+10;
 		const y = ensureInt(index / 4) * PIX_WIDTH + 40;

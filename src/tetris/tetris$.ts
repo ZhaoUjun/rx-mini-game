@@ -11,10 +11,6 @@ let tetrisKey = 0;
 const INIT_TETRIS_1 = getRandomTetris();
 const INIT_TETRIS_2 = getRandomTetris();
 
-export function getRandomType(): number {
-	return (~~(Math.random() * 100) % 6) + 1;
-}
-
 export function getRandomInt(max: number) {
 	return ~~(Math.random() * 100) % max;
 }
@@ -26,7 +22,6 @@ export function getRandomTetris(): TetrisLike {
 	return { type, shape, position: -34, key: ++tetrisKey };
 }
 
-// export const nextTetris$=new BehaviorSubject<TETRISLIKE>(getRandomTetris());
 export const tetris$ = heap$
 	.skip(1)
 	.map(getRandomTetris)
@@ -38,4 +33,5 @@ export const nextTetris$ = tetris$
 	.map(i => i[1])
 	.startWith(INIT_TETRIS_2)
 	.map(i => ({ ...i, position: 0 }));
+
 export const currentTetris$ = tetris$.map(i => i[0]);

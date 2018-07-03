@@ -1,5 +1,4 @@
-import { Observable } from "rxjs/Observable";
-import { Subject } from "rxjs/Subject";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 declare const wx:any
 
 interface Storage {
@@ -7,43 +6,22 @@ interface Storage {
 }
 
 const initStorage = wx.getStorageSync('game')||{}
+
 export function updateStorage(data: Storage, key = "game") {
-	wx.setStorage({
-        key,
-        data,
-		success: res => {
-			sub$.next(data);
-		},
-		fail: res => {
-			console.log(res);
-		}
-	});
+	sub$.next(data)
 }
 
-function createStorage<T>(key: string): Observable<T> {
-	return Observable.create(observer => {
-		wx.getStorage({
-			key,
-			success: res => {
-				observer.next(res.data||{});
-			},
-			fail: res => {
-				observer.next({});
-			}
-		});
-	});
-}
 
-const initStorage$ = createStorage < Storage > ("game");
-
-const sub$ = new Subject<Storage>();
+const sub$ = new BehaviorSubject<Storage>(initStorage);
 
 export const storage$ = sub$
 	.scan(reduce)
-	.startWith(initStorage)    
-
-    // .share()
-    
+	.do(data=>{
+		wx.setStorage({
+			key:'game',
+			data,
+		});
+	})
 
 function reduce(acc: Storage, next: Storage): Storage {
 	return { ...acc, ...next };

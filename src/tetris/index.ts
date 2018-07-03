@@ -4,14 +4,14 @@ import "rxjs/add/operator/do";
 import { game$ } from "./game$";
 import { renderScene } from "../render";
 import { gameOver$ } from "./gameOver$";
-import { nextTetris$ } from "./tetris$";
-
-// GameGlobal.global=GameGlobal;
+import { startPage$ } from "./startPage$";
+import { heap$ } from "./heap$";
 
 export function startTeris(context: CanvasRenderingContext2D) {
-	// nextTetris$.subscribe(next=>{
-	//     console.log(next)
-	// })
+	renderHomePage(context);
+}
+
+export function startGame(context: CanvasRenderingContext2D) {
 	game$.subscribe({
 		next: scene => {
 			renderScene(context, scene.scene);
@@ -22,13 +22,25 @@ export function startTeris(context: CanvasRenderingContext2D) {
 	});
 }
 
-function renderGameOver(ctx: CanvasRenderingContext2D) {
+function renderGameOver(context: CanvasRenderingContext2D) {
 	gameOver$.subscribe({
 		next: scene => {
-			renderScene(ctx, scene);
+			renderScene(context, scene);
 		},
 		complete: () => {
-			console.log("over");
+			heap$.next([]);
+			renderHomePage(context);
+		}
+	});
+}
+
+function renderHomePage(context: CanvasRenderingContext2D) {
+	startPage$.subscribe({
+		next: scene => {
+			renderScene(context, scene);
+		},
+		complete: () => {
+			startGame(context);
 		}
 	});
 }
