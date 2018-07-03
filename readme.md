@@ -16,13 +16,15 @@ clone this project and run
 npm run install
 ```
 
-for develop run 
+##Run
+
+for develop 
 
 ```sh
 npm run dev
 ```
 
-for product run 
+for product 
 
 ```sh
 npm run build
